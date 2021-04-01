@@ -1,0 +1,12 @@
+instrument_servers:
+    hostcomp:
+        ip: 'localhost'
+        port: 5556
+
+mongodb_addr: 'mongodb://localhost:27017/'
+
+spyrelets:
+    # xpstest:
+        # file: 'C:\Users\cmegroup\Desktop\table-exp\spyrelets\xpstest.py'
+        # args: []
+        # kwargs: {}

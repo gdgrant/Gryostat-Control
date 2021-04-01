@@ -1,0 +1,20 @@
+# port to run the instrument server on
+port: 5556
+
+# address of the mongodb server in the format 'mongodb://<ip>:<port>/'
+mongodb_addr: 'mongodb://localhost:27017/'
+
+# actual devices
+devices:
+
+    XPS:
+        class: XPSQ8
+        class_file: 'C:\Users\cmegroup\Desktop\table-exps\drivers\newport\xpsq8.py'
+        args: []
+        kwargs: {}
+        
+    daq:
+        class: 'daqmx'
+        class_file: 'C:\Users\cmegroup\Desktop\table-exps\drivers\ni\daqmx_gary.py'
+        args: ['Dev1']
+        kwargs: []

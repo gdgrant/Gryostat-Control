@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "nspyre-env",
+    "jupyter.jupyterServerType": "local"
+}
