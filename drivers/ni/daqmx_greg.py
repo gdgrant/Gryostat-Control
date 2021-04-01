@@ -2,11 +2,11 @@
 # Gregory Grant
 # April 1, 2021
 
-from lantz.core import Feat, Action, Driver
+from lantz.core import Feat, Action, Driver, DictFeat
 import nidaqmx
 
 class daqmx(Driver):
-    """ A simplified DAQ driver """
+    """ A simplified DAQ driver with key/item task access"""
 
     def __init__(self, device_name):
         self._device_name = device_name # Something like 'Dev1'
@@ -15,9 +15,22 @@ class daqmx(Driver):
         self._analog_input_limits = [-10, 10] # volts
         self._analog_output_limtis = [-10, 10] # volts
 
+    def __getitem__(self, key):
+        if key not in self._tasks:
+            raise Exception('{} not a valid task name.'.format(key))
+
+        # How do I know it's safe to read or write?
+        return self._tasks[key].read()
+
+    def __setitem__(self, key, value):
+        if key not in self._tasks:
+            raise Exception('{} not a valid task name.'.format(key))
+
+        raise Exception('Setting of tasks not yet functional.')
+
     def finalize(self):
         """ Clears all tasks within the DAQ when Lantz unloads the driver """
-        for k in self._tasks:
+        for k in self._tasks.keys():
             self.task_clear(k)
 
     @Action()
@@ -40,7 +53,7 @@ class daqmx(Driver):
 
         # Clear this task if it has previously existed
         if task_name in self._tasks:
-            self.task_clear(task_name)
+            self.clear_task(task_name)
 
         # Check what type of channel this is
         ch_types = ['ai', 'ao', 'di', 'do']
@@ -57,7 +70,7 @@ class daqmx(Driver):
             ch_name = self._device_name + '/' + ch
 
             # Analog input channel type
-            if chtype == 'ai':
+            if ch_type == 'ai':
 
                 if vlimits is None:
                     vlimits = self._analog_input_limits
@@ -65,7 +78,7 @@ class daqmx(Driver):
                 task.ai_channels.add_ai_voltage_chan(ch_name, terminal_config=nidaqmx.constants.TerminalConfiguration.RSE, min_val=vlimits[0], max_val=vlimits[1])
 
             # Analog output channel type
-            elif chtype == 'ao':
+            elif ch_type == 'ao':
 
                 if vlimits is None:
                     vlimits = self._analog_output_limtis
@@ -73,11 +86,11 @@ class daqmx(Driver):
                 task.ao_channels.add_ao_voltage_chan(ch_name, min_val=vlimits[0], max_val=vlimits[1])
 
             # Digital input channel type
-            elif chtype == 'di':
+            elif ch_type == 'di':
                 task.di_channels.add_di_chan(ch_name)
 
             # Digital output channel type
-            elif chtype == 'do':
+            elif ch_type == 'do':
                 task.do_channels.add_do_chan(ch_name)
 
         # Save the task to the internal task dictionary

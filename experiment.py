@@ -121,12 +121,33 @@ def rel_move_XPS(x=None, y=None, z=None):
 
 
 
-discover_XPS()
+# discover_XPS()
 
-zero_XPS()
-show_XPS_pos()
+# zero_XPS()
+# show_XPS_pos()
 
-abs_move_XPS(x=12.0)
-show_XPS_pos()
-rel_move_XPS(y=0.5)
-show_XPS_pos()
+# abs_move_XPS(x=12.0)
+# show_XPS_pos()
+# rel_move_XPS(y=0.5)
+# show_XPS_pos()
+
+
+### Describing use of DAQ
+
+devices.daq.add_task('testing_out', 'ao', ['ao1'], vlimits=[0,5])
+devices.daq.add_task('testing_in', 'ai', ['ai1'], vlimits=[0,5])
+
+a = devices.daq['testing_in']
+print(a)
+quit()
+#devices.daq['testing_out'] = 5
+#b = devices.daq['testing_in']
+#devices.daq['testing_out'] = 0
+#c = devices.daq['testing_in']
+
+print(a, b, c)
+#print(devices.daq.read_task['testing_in'])
+
+#devices.daq._tasks['light2'].write(5)
+#time.sleep(5)
+#devices.daq._tasks['light2'].write(0)

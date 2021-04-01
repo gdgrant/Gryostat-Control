@@ -15,6 +15,6 @@ devices:
         
     daq:
         class: 'daqmx'
-        class_file: 'C:\Users\cmegroup\Desktop\table-exps\drivers\ni\daqmx_gary.py'
+        class_file: 'C:\Users\cmegroup\Desktop\table-exps\drivers\ni\daqmx_greg.py'
         args: ['Dev1']
-        kwargs: []
+        kwargs: {}
